@@ -1,0 +1,23 @@
+.rod {
+  width: 10rem;
+  height: 10rem;
+
+  border-bottom: 3px dotted black;
+
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rod:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 3px dotted black;
+  transform: translate(-50%);
+}

@@ -1,4 +1,4 @@
-const { networkInterfaces } = require("os");
+
 
 const towers = { 1: [1, 2, 3, 4, 5, 6], 2: [], 3: [] }; // the first position of the array is the top of the tower
 
