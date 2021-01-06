@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import styled from "styled-components";
 import Block from "./components/Block";
 import Tower from "./components/Tower";
 
-const blockCount = 5;
-const blocks = [3];
+import { compose, moveBlock } from "./hanoi";
+
+type towersType = {
+  [key: number]: number[];
+};
 
 const Container = styled.div`
   position: absolute;
-
   width: 100vw;
 `;
 
@@ -30,31 +32,28 @@ const Buttono = styled.div`
 `;
 
 function App() {
+  const [towers, setTowers] = useState<towersType>({
+    1: [1, 2, 3, 4, 5, 6],
+    2: [],
+    3: [],
+  });
+
+  const towerClick = (index: number) => {
+    console.log(index);
+  };
   return (
     <Container>
       <Title>Hanoi-o</Title>
       <TowersWrapper>
-        <Tower>
-          <Block size={1}></Block>
-          <Block size={2}></Block>
-          <Block size={3}></Block>
-          <Block size={4}></Block>
-          <Block size={5}></Block>
-          <Block size={6}></Block>
-          <Block size={7}></Block>
-          <Block size={8}></Block>
-          <Block size={9}></Block>
-          <Block size={10}></Block>
-
-          <Buttono>
-            <button>{">"}</button>
-            <button>{">>"}</button>
-          </Buttono>
-        </Tower>
-
-        <Tower></Tower>
-
-        <Tower></Tower>
+        {Object.keys(towers).map(index => (
+          <div onClick={() => towerClick(parseInt(index))}>
+            <Tower colour='blue'>
+              {towers[parseInt(index)].map(i => (
+                <Block size={i}></Block>
+              ))}
+            </Tower>
+          </div>
+        ))}
       </TowersWrapper>
     </Container>
   );
