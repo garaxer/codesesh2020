@@ -10,6 +10,10 @@ type towersType = {
   [key: number]: number[];
 };
 
+type towersColour = {
+  [key: number]: string;
+};
+
 const Container = styled.div`
   position: absolute;
   width: 100vw;
@@ -38,8 +42,18 @@ function App() {
     3: [],
   });
 
+  const [colours, setColours] = useState<towersColour>({
+    1: "",
+    2: "",
+    3: "",
+  });
+
   const towerClick = (index: number) => {
     console.log(index);
+
+    console.log({ ...colours, [index]: "blue" });
+    setColours({ ...colours, [index]: "blue" });
+    //filter the towers to get rid of the selected, map overthem and get a final colour needed depending on some formula that checks if its possible to mvoe the block
   };
   return (
     <Container>
@@ -47,7 +61,7 @@ function App() {
       <TowersWrapper>
         {Object.keys(towers).map(index => (
           <div onClick={() => towerClick(parseInt(index))}>
-            <Tower colour='blue'>
+            <Tower colour={colours[parseInt(index)]}>
               {towers[parseInt(index)].map(i => (
                 <Block size={i}></Block>
               ))}
