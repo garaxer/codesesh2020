@@ -48,19 +48,37 @@ function App() {
     3: "",
   });
 
-  const towerClick = (index: number) => {
+  const towerColour = (index: number) => {
+    // TODO: if the tower is empty blink or something
     console.log(index);
+    console.log({ ...colours, [index]: "lightblue" });
+    const c = Object.keys(towers).reduce((a, c) => {
+      const t = towers[parseInt(c)]; // this tower
+      const newBlockColour =
+        !t.length || t[0] < towers[index][0] ? "green" : "red";
+      return { ...a, [c]: newBlockColour };
+    }, {});
 
-    console.log({ ...colours, [index]: "blue" });
-    setColours({ ...colours, [index]: "blue" });
+    setColours({ ...c, [index]: "lightblue" });
     //filter the towers to get rid of the selected, map overthem and get a final colour needed depending on some formula that checks if its possible to mvoe the block
   };
+
+  const moveBlockToAnotherTower = (index: number) => {
+    //
+  };
+
   return (
     <Container>
       <Title>Hanoi-o</Title>
       <TowersWrapper>
         {Object.keys(towers).map(index => (
-          <div onClick={() => towerClick(parseInt(index))}>
+          <div
+            onClick={() =>
+              colours[parseInt(index)]
+                ? moveBlockToAnotherTower(parseInt(index))
+                : towerColour(parseInt(index))
+            }
+          >
             <Tower colour={colours[parseInt(index)]}>
               {towers[parseInt(index)].map(i => (
                 <Block size={i}></Block>
