@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import styled from "styled-components";
-import Block from "./components/Block";
 import Tower from "./components/Tower";
 
 import { compose, moveBlock } from "./hanoi";
+import { Towers } from "./Types";
 
-type towersType = {
-  [key: number]: number[];
-};
 
-type towersColour = {
-  [key: number]: string;
-};
 
 const Container = styled.div`
   position: absolute;
@@ -20,9 +14,10 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 10rem;
+  font-size: 7rem;
   text-align: center;
   color: Gray;
+  margin-bottom: 2rem;
 `;
 
 const TowersWrapper = styled.div`
@@ -30,81 +25,75 @@ const TowersWrapper = styled.div`
   justify-content: space-evenly;
 `;
 
-const Buttono = styled.div`
-  position: absolute;
-  bottom: -2rem;
-`;
-
 function App() {
-  const [towers, setTowers] = useState<towersType>({
-    1: [1, 2, 3, 4, 5, 6],
-    2: [],
-    3: [],
+  const [towers, setTowers] = useState<Towers>({
+    1: {
+      color: "",
+      disks: [1, 2, 3, 4, 5, 6]
+    },
+    2: {
+      color: "",
+      disks: []
+    },
+    3: {
+      color: "",
+      disks: []
+    }
   });
 
-  const [colours, setColours] = useState<towersColour>({
-    1: "",
-    2: "",
-    3: "",
-  });
+  const [selected, setSelected] = useState<String>("")
 
-  const towerColour = (index: number) => {
+  const towerColour = (index: string) => {
     // TODO: if the tower is empty blink or something
-    console.log(index);
-    console.log({ ...colours, [index]: "lightblue" });
-    const c = Object.keys(towers).reduce((a, c) => {
-      const t = towers[parseInt(c)]; // this tower
-      const newBlockColour =
-        !t.length || t[0] > towers[index][0] ? "green" : "red";
-      return { ...a, [c]: newBlockColour };
-    }, {});
 
-    setColours({ ...c, [index]: "lightblue" });
+    const c = Object.entries(towers).reduce((a, [k,v]) => ({ ...a, [k]: { disks: v.disks, color: (k === index) ? "red" : "green" } }), {})
+
+    // const c = Object.keys(towers).reduce((a, c) => {
+    //   const t = towers[parseInt(c)].disks; // this tower
+    //   const newBlockColour = !t.length || t[0] > towers[index].disks[0] ? "green" : "red";
+    //   return { ...a, [c]: newBlockColour };
+    // }, {});
+
+    setTowers(c);
     //filter the towers to get rid of the selected, map overthem and get a final colour needed depending on some formula that checks if its possible to mvoe the block
   };
 
   const moveBlockToAnotherTower = (index: number) => {
-    //
-    console.log(index);
-    console.log({ ...colours, [index]: "lightblue" });
-    const currentlySelected = Object.keys(colours).filter((v, i) =>
-      colours[parseInt(v)].includes("lightblue")
-    );
-    const currentlySelectedIndex = parseInt(currentlySelected[0]);
+    // //
+    // console.log(index);
+    // console.log({ ...colours, [index]: "lightblue" });
+    // const currentlySelected = Object.keys(colours).filter((v, i) =>
+    //   colours[parseInt(v)].includes("lightblue")
+    // );
+    // const currentlySelectedIndex = parseInt(currentlySelected[0]);
 
-    if (colours[index].includes("green")) {
-      //move
-      console.log("Green");
-      setTowers(moveBlock(currentlySelectedIndex, index)(towers));
+    // if (colours[index].includes("green")) {
+    //   //move
+    //   console.log("Green");
+    //   setTowers(moveBlock(currentlySelectedIndex, index)(towers));
 
-      setColours({
-        1: "",
-        2: "",
-        3: "",
-      });
-    }
+    //   setColours({
+    //     1: "",
+    //     2: "",
+    //     3: "",
+    //   });
+    // }
   };
 
   return (
     <Container>
       <Title>Hanoi-o</Title>
       <TowersWrapper>
-        {Object.keys(towers).map(index => (
-          <div
-            onClick={() =>
-              colours[parseInt(index)]
-                ? moveBlockToAnotherTower(parseInt(index))
-                : towerColour(parseInt(index))
-            }
-          >
-            <Tower colour={colours[parseInt(index)]}>
-              {towers[parseInt(index)].map(i => (
-                <Block size={i}></Block>
-              ))}
-            </Tower>
-          </div>
+        {Object.entries(towers).map(([k, v]) => (
+          <Tower
+            tower={v}
+            color={towers[k].color}
+            onClick={() => v.disks.length && setSelected(k)}
+            selected={selected === k}
+          />
         ))}
       </TowersWrapper>
+        <div style={{ fontSize: '5rem'}}>{selected}</div>
     </Container>
   );
 }
