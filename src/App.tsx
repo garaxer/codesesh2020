@@ -55,7 +55,7 @@ function App() {
     const c = Object.keys(towers).reduce((a, c) => {
       const t = towers[parseInt(c)]; // this tower
       const newBlockColour =
-        !t.length || t[0] < towers[index][0] ? "green" : "red";
+        !t.length || t[0] > towers[index][0] ? "green" : "red";
       return { ...a, [c]: newBlockColour };
     }, {});
 
@@ -65,6 +65,24 @@ function App() {
 
   const moveBlockToAnotherTower = (index: number) => {
     //
+    console.log(index);
+    console.log({ ...colours, [index]: "lightblue" });
+    const currentlySelected = Object.keys(colours).filter((v, i) =>
+      colours[parseInt(v)].includes("lightblue")
+    );
+    const currentlySelectedIndex = parseInt(currentlySelected[0]);
+
+    if (colours[index].includes("green")) {
+      //move
+      console.log("Green");
+      setTowers(moveBlock(currentlySelectedIndex, index)(towers));
+
+      setColours({
+        1: "",
+        2: "",
+        3: "",
+      });
+    }
   };
 
   return (
