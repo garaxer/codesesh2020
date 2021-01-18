@@ -11,3 +11,7 @@ export const moveBlock = (from, to) => (towers) => {
 }
 
 export const compose = (...fns) => x => fns.reduce((a, c) => c(a), x)
+
+
+export const moveCheck = (from: string, to: string, towers: Towers) =>
+towers[to].length ? towers[to][0] > towers[from][0] : true;

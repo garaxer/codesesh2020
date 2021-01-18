@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import "./Tower.css";
 import Block from "./Block";
-import { TowerT } from "../Types";
+import { Towers } from "../Types";
+import { moveCheck, moveBlock } from "../hanoi";
 
 type Props = {
-  tower: TowerT;
-  color?: string;
+  towers: Towers;
+  key: string;
+  akey: string;
   onClick: () => void;
-  selected: Boolean;
+  selected: string;
+  setTowers: Dispatch<SetStateAction<Towers>>;
+  setSelected: Dispatch<SetStateAction<string>>;
 };
 
 const Wrapper = styled.div`
@@ -23,17 +27,57 @@ const Select = styled.div`
   background-color: lightblue;
 `;
 
-const Tower = ({ tower, color, onClick, selected }: Props) => {
+const Tower = ({
+  towers,
+  akey,
+  key,
+  onClick,
+  selected,
+  setSelected,
+  setTowers,
+}: Props) => {
+  const [color, setColor] = useState<string>("");
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [firstSelection, setfirstSelection] = useState<string>("");
+
+  const tower = towers[akey];
+
+  useEffect(() => {
+    setIsSelected(false);
+    setfirstSelection("");
+    setColor("");
+
+    if (selected && !color) {
+      setIsSelected(selected === akey);
+      setfirstSelection(selected);
+      setColor("red");
+      tower.length
+        ? towers[selected][0] < tower[0] && setColor("green")
+        : setColor("green");
+    } else if (selected) {
+      if (selected === akey) {
+        //the original selected box
+
+        const moveTowers = () => {
+          setTowers(moveBlock(firstSelection, selected)(towers));
+          setSelected("");
+        };
+        color.includes("green") && moveTowers();
+      }
+    }
+  }, [selected]);
+
   return (
     <Wrapper
+      key={key}
       onClick={onClick}
-      style={{ backgroundColor: color ? color : "" }}
+      style={{ backgroundColor: color }}
       className='rod'
     >
-      {tower.disks.map(disk => (
+      {towers[akey].map(disk => (
         <Block size={disk}></Block>
       ))}
-      {selected && <Select />}
+      {isSelected && <Select />}
     </Wrapper>
   );
 };
