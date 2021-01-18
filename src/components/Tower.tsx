@@ -37,18 +37,15 @@ const Tower = ({
   setTowers,
 }: Props) => {
   const [color, setColor] = useState<string>("");
-  const [isSelected, setIsSelected] = useState<boolean>(false);
   const [firstSelection, setfirstSelection] = useState<string>("");
 
   const tower = towers[akey];
 
   useEffect(() => {
-    setIsSelected(false);
     setfirstSelection("");
     setColor("");
 
     if (selected && !color) {
-      setIsSelected(selected === akey);
       setfirstSelection(selected);
       setColor("red");
       tower.length
@@ -56,16 +53,12 @@ const Tower = ({
         : setColor("green");
     } else if (selected) {
       if (selected === akey) {
-        //the original selected box
-
-        const moveTowers = () => {
+        color.includes("green") &&
           setTowers(moveBlock(firstSelection, selected)(towers));
-          setSelected("");
-        };
-        color.includes("green") && moveTowers();
       }
+      setSelected("");
     }
-  }, [selected]);
+  }, [selected, towers]);
 
   return (
     <Wrapper
@@ -77,7 +70,7 @@ const Tower = ({
       {towers[akey].map(disk => (
         <Block size={disk}></Block>
       ))}
-      {isSelected && <Select />}
+      {selected === akey && <Select />}
     </Wrapper>
   );
 };
