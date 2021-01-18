@@ -1,4 +1,5 @@
-
+//const towers = { 1: [1, 2, 3, 4, 5, 6], 2: [], 3: [] };
+//let b = compose(change(1, 2), change(1, 3), change(2, 1), )(towers)
 
 export const moveBlock = (from, to) => (towers) => {
   const [head, ...tail] = towers[from];

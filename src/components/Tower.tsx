@@ -9,7 +9,7 @@ type Props = {
   color?: string;
   onClick: () => void;
   selected: Boolean;
-}
+};
 
 const Wrapper = styled.div`
   position: relative;
@@ -19,22 +19,21 @@ const Select = styled.div`
   height: 1rem;
   width: 100%;
   position: absolute;
-  bottom: -1rem;
+  bottom: -2rem;
   background-color: lightblue;
 `;
 
-const Tower = ({
-  tower,
-  color,
-  onClick,
-  selected
-}: Props) => {
+const Tower = ({ tower, color, onClick, selected }: Props) => {
   return (
-    <Wrapper onClick={onClick} style={{ backgroundColor: color ? color : "" }} className='rod'>
+    <Wrapper
+      onClick={onClick}
+      style={{ backgroundColor: color ? color : "" }}
+      className='rod'
+    >
       {tower.disks.map(disk => (
         <Block size={disk}></Block>
       ))}
-      { selected && <Select />}
+      {selected && <Select />}
     </Wrapper>
   );
 };
