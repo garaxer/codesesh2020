@@ -55,7 +55,7 @@ const Tower = ({
       setfirstSelection(selected);
       moveCheck(selected, akey, towers) ? setColor("green") : setColor("red");
     } else if (selected && color) {
-      // Something is still selected and we are in game phase 2
+      // Something else has been selected and we are in game phase 2
 
       // TODO: Change these to a switch statement, maybe useReducer
       //only perform the action if we are working on displaying the selected tower (TODO: Move this logic else where)
@@ -79,7 +79,7 @@ const Tower = ({
       setfirstSelection("");
       setColor("");
     }
-  }, [akey, color, firstSelection, selected, setSelected, towers]);
+  }, [akey, color, firstSelection, selected, setSelected, setTowers, towers]);
 
   return (
     <Wrapper
