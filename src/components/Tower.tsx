@@ -39,26 +39,47 @@ const Tower = ({
   const [color, setColor] = useState<string>("");
   const [firstSelection, setfirstSelection] = useState<string>("");
 
-
   useEffect(() => {
-    setfirstSelection("");
-    setColor("");
+    // Want to be able to unselect if clicking the same block.
+    // Dont do anything if you have clicked red.
+    // move it if you have something selected and the next selection is green
+
+    // If there is colour we are in phase 2
+    //TODO: checking if we are in phase two by checking if the blocks are coloured in is weird and the game phase should be stored in App
+
+    console.log("effect");
+    console.log(selected);
 
     if (selected && !color) {
+      // Something has been selected and we are in game phase 1
       setfirstSelection(selected);
-      //setColor("red");
-      //tower.length
-      //  ? towers[selected][0] < tower[0] && setColor("green")
-      //  : setColor("green");
       moveCheck(selected, akey, towers) ? setColor("green") : setColor("red");
-    } else {
+    } else if (selected && color) {
+      // Something else has been selected and we are in game phase 2
+
+      // TODO: Change these to a switch statement, maybe useReducer
+      //only perform the action if we are working on displaying the selected tower (TODO: Move this logic else where)
       if (selected === akey) {
-        color.includes("green") && // Use the color to check validility to avoid redoing the check
-          setTowers(moveBlock(firstSelection, selected)(towers));
+        switch (color) {
+          case "green":
+            setSelected("");
+            setTowers(moveBlock(firstSelection, selected)(towers));
+            break;
+          case "red":
+            setSelected(firstSelection);
+            break;
+          default:
+            break;
+        }
       }
+      // is the NEW selection green? move the block
+    } else {
+      // No selection, reset
       setSelected("");
+      setfirstSelection("");
+      setColor("");
     }
-  }, [selected, towers]);
+  }, [akey, color, firstSelection, selected, setSelected, setTowers, towers]);
 
   return (
     <Wrapper
@@ -68,9 +89,9 @@ const Tower = ({
       className='rod'
     >
       {towers[akey].map(disk => (
-        <Block size={disk}></Block>
+        <Block key={disk} size={disk}></Block>
       ))}
-      {selected === akey && <Select />}
+      {selected && akey === firstSelection && <Select />}
     </Wrapper>
   );
 };
