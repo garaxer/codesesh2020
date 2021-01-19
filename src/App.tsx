@@ -70,7 +70,23 @@ function App() {
       </TowersWrapper>
       <div style={{ fontSize: "5rem" }}>{selected}</div>
       {isComplete && (
-        <div style={{ fontSize: "5rem", textAlign: "center" }}>You Win</div>
+        <div style={{ fontSize: "5rem", textAlign: "center" }}>
+          <div>You Win</div>
+          <button
+            onClick={() =>
+              setTowers({
+                1: Array.from(
+                  { length: towers[3].length + 1 },
+                  (_, i) => i + 1
+                ),
+                2: [],
+                3: [],
+              })
+            }
+          >
+            Next
+          </button>
+        </div>
       )}
     </Container>
   );
