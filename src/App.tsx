@@ -44,7 +44,11 @@ function App() {
             key={k}
             towers={towers}
             akey={k}
-            onClick={() => (v.length || selected) && setSelected(k)}
+            onClick={() =>
+              selected === k
+                ? setSelected("")
+                : (v.length || selected) && setSelected(k)
+            }
             selected={selected}
             setSelected={setSelected}
             setTowers={setTowers}

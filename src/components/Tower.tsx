@@ -39,7 +39,6 @@ const Tower = ({
   const [color, setColor] = useState<string>("");
   const [firstSelection, setfirstSelection] = useState<string>("");
 
-  const tower = towers[akey];
 
   useEffect(() => {
     setfirstSelection("");
@@ -47,13 +46,14 @@ const Tower = ({
 
     if (selected && !color) {
       setfirstSelection(selected);
-      setColor("red");
-      tower.length
-        ? towers[selected][0] < tower[0] && setColor("green")
-        : setColor("green");
-    } else if (selected) {
+      //setColor("red");
+      //tower.length
+      //  ? towers[selected][0] < tower[0] && setColor("green")
+      //  : setColor("green");
+      moveCheck(selected, akey, towers) ? setColor("green") : setColor("red");
+    } else {
       if (selected === akey) {
-        color.includes("green") &&
+        color.includes("green") && // Use the color to check validility to avoid redoing the check
           setTowers(moveBlock(firstSelection, selected)(towers));
       }
       setSelected("");
