@@ -9,6 +9,10 @@ type Props = {
   color: string;
   onClick: () => void;
   selected: boolean;
+  mouseCrds: {
+    x: number;
+    y: number;
+  };
 };
 
 const Wrapper = styled.div`
@@ -23,15 +27,27 @@ const Select = styled.div`
   background-color: lightblue;
 `;
 
-const Tower = ({ tower, onClick, selected, color }: Props) => {
+const Tower = ({ tower, onClick, selected, color, mouseCrds }: Props) => {
+  const { x, y } = mouseCrds;
+
+  const followMouseBlockStyle: React.CSSProperties = {
+    display: "block",
+    position: "fixed",
+    top: y + 10,
+    left: x,
+    zIndex: 2,
+  };
+
   return (
     <Wrapper
       onClick={onClick}
       style={{ backgroundColor: color }}
       className='rod'
     >
-      {tower.map(disk => (
-        <Block key={disk} size={disk}></Block>
+      {tower.map((disk, i) => (
+        <div key={disk} style={selected && !i ? followMouseBlockStyle : {}}>
+          <Block size={disk}></Block>
+        </div>
       ))}
       {selected && <Select />}
     </Wrapper>
