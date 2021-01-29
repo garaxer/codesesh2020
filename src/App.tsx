@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import styled from "styled-components";
 import Tower from "./components/Tower";
@@ -37,24 +37,32 @@ function App() {
   const isComplete = !towers[1].length && !towers[2].length;
 
   const handlePhaseOne = (k: string, v: TowerT) => {
+    console.log("phas1");
+
+    // Click on the same tower, reset it other change the selection
     selected === k ? setSelected("") : (v.length || selected) && setSelected(k);
   };
 
   const handlePhaseTwo = (k: String) => {
+    console.log("phas2");
+    // valid move, then move it and reset to phase 1
     moveCheck(selected, k, towers) && setTowers(moveBlock(selected, k)(towers));
     setSelected("");
   };
 
-  useEffect(() => {
-    console.log("selection changed");
-  }, [selected]);
+  const [mouseCrds, setMouseCrds] = useState({ x: 0, y: 0 });
+  const handleMouseMove = (e: React.MouseEvent) => {
+    e.persist();
+    setMouseCrds(mouseCrds => ({ ...mouseCrds, x: e.clientX, y: e.clientY }));
+  };
 
   return (
-    <Container>
+    <Container onMouseMove={handleMouseMove}>
       <Title>Hanoi-o</Title>
       <TowersWrapper>
         {Object.entries(towers).map(([k, v]) => (
           <Tower
+            key={k}
             tower={towers[k]}
             color={
               // If you dont want to use movecheck again in phase two, you can add the colours to the towers state object but then you need to remove them to process the move.
@@ -65,10 +73,12 @@ function App() {
               !selected ? handlePhaseOne(k, v) : handlePhaseTwo(k)
             }
             selected={selected === k}
+            mouseCrds={mouseCrds}
           />
         ))}
       </TowersWrapper>
       <div style={{ fontSize: "5rem" }}>{selected}</div>
+
       {isComplete && (
         <div style={{ fontSize: "5rem", textAlign: "center" }}>
           <div>You Win</div>
