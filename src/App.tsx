@@ -37,8 +37,7 @@ function App() {
   const isComplete = !towers[1].length && !towers[2].length;
 
   const handlePhaseOne = (k: string, v: TowerT) => {
-    console.log("phas1");
-
+    console.log("phase1");
     // Click on the same tower, reset it other change the selection
     selected === k ? setSelected("") : (v.length || selected) && setSelected(k);
   };

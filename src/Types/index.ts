@@ -11,3 +11,5 @@ export type TowerT = Array<Disk>;
 export type Towers = {
   [key: string]: TowerT
 };
+
+
